@@ -14,7 +14,9 @@ const buildControls = (props) => (
         {controls.map(ctrl =>(
             <BuildControl key ={ctrl.label} 
             label={ctrl.label} 
-            added={()=>props.ingredientAdded(ctrl.type)}/> // invoke the addIngredientHandler from BurgerBuilder and pass the type to it
+            added={()=>props.ingredientAdded(ctrl.type)}
+            removed={()=> props.ingredientRemoved(ctrl.type)}  // invoke the addIngredientHandler from BurgerBuilder and pass the type to it
+            disabled={props.disabled[ctrl.type]}/>
         ))}
     </div>
 )
