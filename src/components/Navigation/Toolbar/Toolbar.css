@@ -19,4 +19,11 @@
 
 .Logo {
     height: 99%;
+    margin-bottom: 32px;
+}
+
+@media (max-width: 499px) {
+    .DekstopOnly {
+        display: none;
+    }
 }
