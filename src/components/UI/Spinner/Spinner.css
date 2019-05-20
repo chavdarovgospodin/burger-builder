@@ -19,7 +19,7 @@
     transform: translateZ(0);
     z-index: 200;
   }
-  .loader:before {
+  .Loader:before {
     width: 50%;
     height: 50%;
     background: #ffffff;
@@ -29,7 +29,7 @@
     left: 0;
     content: '';
   }
-  .loader:after {
+  .Loader:after {
     background: #fff;
     width: 75%;
     height: 75%;
