@@ -4,6 +4,7 @@ import classes from "./ContactData.css";
 import axios from "../../../axios-orders";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import Input from "../../../components/UI/Input/Input";
+import input from "../../../components/UI/Input/Input";
 
 class ContactData extends Component {
   state = {
@@ -82,6 +83,18 @@ class ContactData extends Component {
       });
   };
 
+  inputChangeHandler = (event, inputIdentifier) => {
+        const copiedOrderForm = {
+            ...this.state.orderForm
+        };
+        const updatedformElement = {
+            ...copiedOrderForm[inputIdentifier]
+        };
+        updatedformElement.value = event.target.value;
+        copiedOrderForm[inputIdentifier] = updatedformElement;
+        this.setState({orderForm: copiedOrderForm});
+  }
+
   render() {
     const formElementsArray = [];
 
@@ -99,6 +112,7 @@ class ContactData extends Component {
             elementType={formElement.config.elementType}
             elementConfig={formElement.config.elementConfig}
             value={formElement.config.value}
+            changed={(event)=>this.inputChangeHandler(event,formElement.id)}
           />
         ))}
         <Button btnType="Success" clicked={this.orderHandler}>
