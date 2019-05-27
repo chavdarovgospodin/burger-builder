@@ -4,7 +4,6 @@ import classes from "./ContactData.css";
 import axios from "../../../axios-orders";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import Input from "../../../components/UI/Input/Input";
-import input from "../../../components/UI/Input/Input";
 
 class ContactData extends Component {
   state = {
@@ -15,7 +14,11 @@ class ContactData extends Component {
           type: "text",
           placeholder: "Your Name"
         },
-        value: ""
+        value: "",
+        validation: {
+            required: true
+        },
+        valid: false
       },
       street: {
         elementType: "input",
@@ -23,7 +26,11 @@ class ContactData extends Component {
           type: "text",
           placeholder: "Street"
         },
-        value: ""
+        value: "",
+        validation: {
+            required: true
+        },
+        valid: false
       },
       zipCode: {
         elementType: "input",
@@ -31,7 +38,13 @@ class ContactData extends Component {
           type: "text",
           placeholder: "Zip code"
         },
-        value: ""
+        value: "",
+        validation: {
+            required: true,
+            minLength: 3,
+            maxLength: 5
+        },
+        valid: false
       },
       country: {
         elementType: "input",
@@ -39,7 +52,11 @@ class ContactData extends Component {
           type: "text",
           placeholder: "Country"
         },
-        value: ""
+        value: "",
+        validation: {
+            required: true
+        },
+        valid: false
       },
       email: {
         elementType: "input",
@@ -47,7 +64,11 @@ class ContactData extends Component {
           type: "email",
           placeholder: "Your Email"
         },
-        value: ""
+        value: "",
+        validation: {
+            required: true
+        },
+        valid: false
       },
       deliveryMethod: {
         elementType: "select",
@@ -95,8 +116,23 @@ class ContactData extends Component {
             ...copiedOrderForm[inputIdentifier]
         };
         updatedformElement.value = event.target.value;
+        updatedformElement.valid = this.checkValidation(updatedformElement.value, updatedformElement.validation)
         copiedOrderForm[inputIdentifier] = updatedformElement;
         this.setState({orderForm: copiedOrderForm});
+  }
+  checkValidation = (valid, rules) => {
+    let isValid = true;
+    if(rules.required) {
+        isValid = valid.trim() !== '' && isValid;
+    }
+    if(rules.minLength) {
+        isValid = valid.trim().length >= rules.minLength && isValid;
+    }
+    if(rules.maxLength) {
+        isValid = valid.trim().length <= rules.maxLength && isValid;
+    }
+    console.log(isValid);
+    return isValid;
   }
 
   render() {
