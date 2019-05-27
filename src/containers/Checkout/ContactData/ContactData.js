@@ -18,7 +18,8 @@ class ContactData extends Component {
         validation: {
             required: true
         },
-        valid: false
+        valid: false,
+        isPristine: true
       },
       street: {
         elementType: "input",
@@ -30,7 +31,8 @@ class ContactData extends Component {
         validation: {
             required: true
         },
-        valid: false
+        valid: false,
+        isPristine: true
       },
       zipCode: {
         elementType: "input",
@@ -44,7 +46,8 @@ class ContactData extends Component {
             minLength: 3,
             maxLength: 5
         },
-        valid: false
+        valid: false,
+        isPristine: true
       },
       country: {
         elementType: "input",
@@ -56,7 +59,8 @@ class ContactData extends Component {
         validation: {
             required: true
         },
-        valid: false
+        valid: false,
+        isPristine: true
       },
       email: {
         elementType: "input",
@@ -68,7 +72,8 @@ class ContactData extends Component {
         validation: {
             required: true
         },
-        valid: false
+        valid: false,
+        isPristine: true
       },
       deliveryMethod: {
         elementType: "select",
@@ -78,11 +83,14 @@ class ContactData extends Component {
             { value: "cheapest", displayValue: "Cheapest" }
           ]
         },
-        value: ""
+        value: "",
+        valid: true,
+        validation: {},
       }
     },
 
-    loading: false
+    loading: false,
+    isValidated: false
   };
   orderHandler = event => {
     event.preventDefault();
@@ -115,10 +123,16 @@ class ContactData extends Component {
         const updatedformElement = {
             ...copiedOrderForm[inputIdentifier]
         };
+       
         updatedformElement.value = event.target.value;
         updatedformElement.valid = this.checkValidation(updatedformElement.value, updatedformElement.validation)
+        updatedformElement.isPristine = false;
         copiedOrderForm[inputIdentifier] = updatedformElement;
-        this.setState({orderForm: copiedOrderForm});
+        let isValidated = true;
+        for (let inputEl in copiedOrderForm) {
+            isValidated = copiedOrderForm[inputEl].valid && isValidated;
+        }
+        this.setState({orderForm: copiedOrderForm, isValidated: isValidated});
   }
   checkValidation = (valid, rules) => {
     let isValid = true;
@@ -131,7 +145,6 @@ class ContactData extends Component {
     if(rules.maxLength) {
         isValid = valid.trim().length <= rules.maxLength && isValid;
     }
-    console.log(isValid);
     return isValid;
   }
 
@@ -153,9 +166,11 @@ class ContactData extends Component {
             elementConfig={formElement.config.elementConfig}
             value={formElement.config.value}
             changed={(event)=>this.inputChangeHandler(event,formElement.id)}
+            validation = {!formElement.config.valid}
+            isPristine = {formElement.config.isPristine}
           />
         ))}
-        <Button btnType="Success" clicked={this.orderHandler}>
+        <Button btnType="Success" clicked={this.orderHandler} disabled={!this.state.isValidated}>
           ORDER
         </Button>
       </form>
