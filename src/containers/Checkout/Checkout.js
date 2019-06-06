@@ -3,6 +3,7 @@ import CheckoutSummary from "../../components/Order/CheckoutSummary/CheckoutSumm
 import { Route, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import ContactData from "./ContactData/ContactData";
+import * as actions from '../../store/actions/index';
 
 class Checkout extends Component {
 
@@ -13,10 +14,12 @@ class Checkout extends Component {
     this.props.history.goBack();
   };
   render() {
-    let summary = <Redirect to='' />
+    let summary = <Redirect to='' />;
     if (this.props.ings) {
+      const purchasedRedirect = this.props.purchased ? <Redirect to="/" /> : null;
       summary =(
         <div>
+          {purchasedRedirect}
         <h1 style={{textAlign: 'center'}}>A delicious Burger!</h1>
       <CheckoutSummary
         ingredients={this.props.ings}
@@ -35,8 +38,11 @@ class Checkout extends Component {
 
 const mapStateToProps = state => {
   return {
-    ings: state.burgerBuilder.ingredients
+    ings: state.burgerBuilder.ingredients,
+    purchased: state.order.purchased
   }
 }
+
+
 
 export default connect(mapStateToProps)(Checkout);
